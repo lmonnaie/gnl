@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 14:34:41 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/01/11 15:07:00 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,32 @@ int		get_next_line(const int fd, char **line)
 	int				ret;
 	static char		*remainder;
 	char *ptr;
+	char *temp;
 
 	if (fd < 0)
 		return (-1);
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
+		temp = ft_strnew(BUFF_SIZE + 1);
+		temp = buff;
 		if (remainder)
 		{
-			buff = ft_strjoin(remainder, buff);
+			temp = ft_strjoin(remainder, buff);
 			free(remainder);
 		}
-		if ((ptr = ft_strchr(buff, '\n')) != NULL)
+		if ((ptr = ft_strchr(temp, '\n')) != NULL)
 		{
-			*line = ft_strsub(buff, 0, (ptr-buff));
-			remainder = ft_strsub(buff, (ptr-buff)+1, ft_strlen(buff));
+			*line = ft_strsub(temp, 0, (ptr-temp));
+			remainder = ft_strsub(buff, (ptr-temp)+1, ft_strlen(temp));
 			return (1);
 		}
 		else
 		{
-			*line = buff;
-			free(buff);
-			buff = ft_strnew(BUFF_SIZE + 1);
+			*line = temp;
+			free(temp);
+			temp = ft_strnew(BUFF_SIZE + 1);
 		}
 	}
+	return (0);
 }
