@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 15:05:24 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 14:30:43 by lmonnaie         ###   ########.fr       */
+/*   Created: 2018/11/21 10:57:41 by lmonnaie          #+#    #+#             */
+/*   Updated: 2018/11/27 15:43:02 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# define BUFF_SIZE 32
+#include "libft.h"
 
-int get_next_line(const int fd, char **line);
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+{
+	t_list *nlist;
 
-#endif
+	if (lst)
+	{
+		if (!(nlist = (t_list *)malloc(sizeof(lst))))
+			return (NULL);
+		nlist = f(lst);
+		nlist->next = ft_lstmap(lst->next, f);
+		return (nlist);
+	}
+	return (NULL);
+}

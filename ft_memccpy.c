@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 15:05:24 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 14:30:43 by lmonnaie         ###   ########.fr       */
+/*   Created: 2018/10/25 13:24:30 by lmonnaie          #+#    #+#             */
+/*   Updated: 2018/11/29 14:10:37 by losuna-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# define BUFF_SIZE 32
+#include "libft.h"
 
-int get_next_line(const int fd, char **line);
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
+{
+	unsigned char *nsrc;
+	unsigned char *ndest;
 
-#endif
+	nsrc = (unsigned char *)src;
+	ndest = (unsigned char *)dst;
+	while (n--)
+	{
+		*ndest = *nsrc;
+		if (*ndest == (unsigned char)c)
+			return (ndest + 1);
+		nsrc++;
+		ndest++;
+	}
+	return (NULL);
+}

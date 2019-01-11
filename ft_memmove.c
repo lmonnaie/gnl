@@ -1,20 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 15:05:24 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 14:30:43 by lmonnaie         ###   ########.fr       */
+/*   Created: 2018/10/25 14:48:08 by lmonnaie          #+#    #+#             */
+/*   Updated: 2018/11/29 14:13:57 by losuna-b         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# define BUFF_SIZE 32
+#include "libft.h"
 
-int get_next_line(const int fd, char **line);
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	char *tmp;
 
-#endif
+	tmp = ft_strnew(len);
+	if (tmp)
+	{
+		tmp = ft_memcpy(tmp, src, len);
+		dst = ft_memcpy(dst, tmp, len);
+	}
+	free(tmp);
+	return (dst);
+}

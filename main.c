@@ -1,20 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 15:05:24 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 14:30:43 by lmonnaie         ###   ########.fr       */
+/*   Created: 2019/01/11 13:18:35 by lmonnaie          #+#    #+#             */
+/*   Updated: 2019/01/11 14:36:58 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdio.h>
+#include <fcntl.h>
+#include "get_next_line.h"
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# define BUFF_SIZE 32
+int main (int argc, char **argv)
+{
+char *line;
+int fd;
 
-int get_next_line(const int fd, char **line);
+line = NULL;
+if (argc != 2)
+	{
+		printf("mauvais arguments");
+		return (-1);
+	}
+fd = open(*path*, O_RDONLY);
+while (get_next_line(fd, &line) == 1)
+	{
+		printf (line);
+		ft_strdel(&line);
+	}
+close(fd);
+}
 
-#endif
+
