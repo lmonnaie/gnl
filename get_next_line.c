@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/16 17:16:46 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/01/16 18:04:08 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,41 +25,36 @@ char *buff_read(fd)
 	int		ret;
 	char	buff[BUFF_SIZE + 1];
 	char	*temp;
+
+	temp = ft_strnew(BUFF_SIZE + 1);
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 		buff[ret] = '\0';
 	temp = buff;
+	free(buff);
 	return (temp);
 }
 
 int		get_next_line(const int fd, char **line)
 {
-	char			buff[BUFF_SIZE + 1];
-	int				ret;
 	static char		*remainder;
 	char *ptr;
 	char *temp;
 
-	if (fd < 0)
+	if (fd < 0 || fd > OPEN_MAX)
 		return (-1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	temp = buff_read(fd);
+	if (remainder)
+		temp = remainder_handling(remainder, temp);
+	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
-		buff[ret] = '\0';
-		temp = ft_strnew(BUFF_SIZE + 1);
-		temp = buff;
-		if (remainder)
-			temp = remainder_handling(remainder, buff);
-		if ((ptr = ft_strchr(temp, '\n')) != NULL)
-		{
-			*line = ft_strsub(temp, 0, (ptr-temp));
-			remainder = ft_strsub(buff, (ptr-temp)+1, ft_strlen(temp));
-			return (1);
-		}
-		else
-		{
-			*line = temp;
-			free(temp);
-			temp = ft_strnew(BUFF_SIZE + 1);
-		}
+		*line = ft_strsub(temp, 0, (ptr-temp));
+		remainder = ft_strsub(temp, (ptr-temp)+1, ft_strlen(temp));
+		return (1);
+	}
+	else
+	{
+		*line = temp;
+		free(temp);
 	}
 	return (0);
 }
