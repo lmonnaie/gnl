@@ -6,11 +6,30 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 15:07:00 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/01/16 17:16:46 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char *remainder_handling(char *remainder, char *buff)
+{
+	char *temp;
+	temp = ft_strjoin(remainder, buff);
+	free(remainder);
+	return (temp);
+}
+
+char *buff_read(fd)
+{
+	int		ret;
+	char	buff[BUFF_SIZE + 1];
+	char	*temp;
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+		buff[ret] = '\0';
+	temp = buff;
+	return (temp);
+}
 
 int		get_next_line(const int fd, char **line)
 {
@@ -28,10 +47,7 @@ int		get_next_line(const int fd, char **line)
 		temp = ft_strnew(BUFF_SIZE + 1);
 		temp = buff;
 		if (remainder)
-		{
-			temp = ft_strjoin(remainder, buff);
-			free(remainder);
-		}
+			temp = remainder_handling(remainder, buff);
 		if ((ptr = ft_strchr(temp, '\n')) != NULL)
 		{
 			*line = ft_strsub(temp, 0, (ptr-temp));
