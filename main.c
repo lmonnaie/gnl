@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/11 13:18:35 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/11 15:08:14 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/01/19 14:19:44 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -24,13 +24,12 @@ if (argc != 2)
 		printf("mauvais arguments");
 		return (-1);
 	}
-fd = open(*path*, O_RDONLY);
-while (get_next_line(fd, &line) == 1)
+fd = open(argv[1], O_RDONLY);
+while (get_next_line(fd, &line) > 0)
 	{
-		printf (line);
+		printf("%s", line);
 		ft_strdel(&line);
 	}
 close(fd);
+return (0);
 }
-
-

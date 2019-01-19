@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/01/19 14:19:26 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/01/19 16:06:23 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char *buff_read(fd)
 	char	*temp;
 
 	temp = ft_strnew(BUFF_SIZE + 1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0 && !(ft_strchr(buff, '\n')))
 	{
 		buff[ret] = '\0';
 		temp = ft_strjoin(temp, buff);
