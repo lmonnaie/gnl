@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/08 21:37:10 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/15 15:49:33 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char *remainder_handling(char *remainder, char *buff)
 	char *temp;
 
 	temp = ft_strjoin(remainder, buff);
-//	free(remainder);
+	free(remainder);
 	return (temp);
 }
 
@@ -25,21 +25,21 @@ char *buff_read(fd)
 {
 	int		ret;
 	char	buff[BUFF_SIZE + 1];
-	char	*temp;
+	char	*temp_buff;
 
-	temp = ft_strnew(BUFF_SIZE + 1);
+	temp_buff = ft_strnew(BUFF_SIZE + 1);
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
 		if (ft_strchr(buff, '\n') == NULL)
-			temp = ft_strjoin(temp, buff);
+			temp_buff = ft_strjoin(temp_buff, buff);
 		else
 		{
-			temp = ft_strjoin(temp, buff);
-			return (temp);
+			temp_buff = ft_strjoin(temp_buff, buff);
+			return (temp_buff);
 		}
 	}
-	return (temp);
+	return (temp_buff);
 }
 
 int		get_next_line(const int fd, char **line)
@@ -62,9 +62,10 @@ int		get_next_line(const int fd, char **line)
 	else
 	{
 		*line = temp;
-//		free(temp);
+		//free(temp);
 	}
 	if (line[0][0] == '\0')
 		return (0);
+	free(temp);
 	return (1);
 }
