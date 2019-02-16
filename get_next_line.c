@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/16 17:03:48 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/16 18:20:10 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ char	*remainder_handling(char *remainder, char *buff)
 	char *temp;
 
 	temp = ft_strjoin(remainder, buff);
-	free(remainder);
+	if (remainder)
+		free(remainder);
 	return (temp);
 }
 
@@ -39,6 +40,8 @@ char	*buff_read(int fd)
 			return (temp_buff);
 		}
 	}
+	if (ret == -1)
+		temp_buff = NULL;
 	return (temp_buff);
 }
 
@@ -50,7 +53,8 @@ int		get_next_line(const int fd, char **line)
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (-1);
-	temp = buff_read(fd);
+	if (!(temp = buff_read(fd)))
+		return (-1);
 	if (remainder)
 		temp = remainder_handling(remainder, temp);
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
@@ -65,6 +69,7 @@ int		get_next_line(const int fd, char **line)
 	}
 	if (line[0][0] == '\0')
 		return (0);
-	free(temp);
+	if (temp)
+		free(temp);
 	return (1);
 }
