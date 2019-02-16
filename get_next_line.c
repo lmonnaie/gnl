@@ -6,13 +6,13 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/15 15:49:33 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/16 17:03:48 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *remainder_handling(char *remainder, char *buff)
+char	*remainder_handling(char *remainder, char *buff)
 {
 	char *temp;
 
@@ -21,7 +21,7 @@ char *remainder_handling(char *remainder, char *buff)
 	return (temp);
 }
 
-char *buff_read(fd)
+char	*buff_read(int fd)
 {
 	int		ret;
 	char	buff[BUFF_SIZE + 1];
@@ -45,8 +45,8 @@ char *buff_read(fd)
 int		get_next_line(const int fd, char **line)
 {
 	static char		*remainder;
-	char *ptr;
-	char *temp;
+	char			*ptr;
+	char			*temp;
 
 	if (fd < 0 || fd > OPEN_MAX)
 		return (-1);
@@ -55,14 +55,13 @@ int		get_next_line(const int fd, char **line)
 		temp = remainder_handling(remainder, temp);
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
-		*line = ft_strsub(temp, 0, (ptr-temp));
-		remainder = ft_strsub(temp, (ptr-temp) + 1, ft_strlen(temp));
+		*line = ft_strsub(temp, 0, (ptr - temp));
+		remainder = ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp));
 		return (1);
 	}
 	else
 	{
 		*line = temp;
-		//free(temp);
 	}
 	if (line[0][0] == '\0')
 		return (0);
