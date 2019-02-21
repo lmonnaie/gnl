@@ -6,17 +6,18 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/18 19:57:06 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/21 23:50:10 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*remainder_handling(char *remainder, char *buff)
 {
 	char *temp;
 
-	if(!(temp = ft_strjoin_free(remainder, buff, 1)))
+	if(!(temp = ft_strjoin_free(remainder, buff, 3)))
 		return (NULL);
 	return (temp);
 }
@@ -55,23 +56,29 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	if (!(temp = buff_read(fd)))
 		return (-1);
+	//printf("temp : %s\n", temp);
+	//printf("line : %s\n", *line);
+	//printf("remainder : %s\n", remainder);
 	if (remainder)
+	{
 		if (!(temp = remainder_handling(remainder, temp)))
 		{
 			ft_strdel(&temp);
 			return (-1);
 		}
+	}
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
 		*line = ft_strsub(temp, 0, (ptr - temp));
 		remainder = ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp));
-		ft_strdel(&temp);
+		//ft_strdel(&temp);
 		return (1);
 	}
 	else
 	{
 		*line = temp;
-		ft_strdel(&temp);
+		//printf("line2 : %s\n", *line);
+		//ft_strdel(&temp);
 	}
 	if (line[0][0] == '\0')
 		return (0);
