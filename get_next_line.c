@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/25 17:55:54 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/27 15:27:06 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	if (!(temp = buff_read(fd)))
 		return (-1);
-	if (remainder[fd] && line[0][0] != '\0' && remainder[fd][0] != '\0')
+	if (remainder[fd] && remainder[fd][0] != '\0')
 	{
 		if (!(temp = remainder_handling(remainder, temp, fd)))
 		{
@@ -66,8 +66,8 @@ int		get_next_line(const int fd, char **line)
 	}
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
-		*line = ft_strsub_free(temp, 0, (ptr - temp), 0);
-		remainder[fd] = ft_strsub_free(temp, (ptr - temp) + 1, ft_strlen(temp), 0);
+		*line = ft_strsub(temp, 0, (ptr - temp));
+		remainder[fd] = ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp));
 		//ft_strdel(&temp);
 		return (1);
 	}
