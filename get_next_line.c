@@ -6,18 +6,18 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/02/21 23:50:10 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/02/25 17:55:54 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*remainder_handling(char *remainder, char *buff)
+char	*remainder_handling(char **remainder, char *buff, int fd)
 {
 	char *temp;
 
-	if(!(temp = ft_strjoin_free(remainder, buff, 3)))
+	if(!(temp = ft_strjoin_free(remainder[fd], buff, 3)))
 		return (NULL);
 	return (temp);
 }
@@ -48,20 +48,17 @@ char	*buff_read(int fd)
 
 int		get_next_line(const int fd, char **line)
 {
-	static char		*remainder;
+	static char		*remainder[OPEN_MAX];
 	char			*ptr;
 	char			*temp;
 
-	if (fd < 0 || fd > OPEN_MAX)
+	if (fd < 0 || fd > OPEN_MAX || line == NULL)
 		return (-1);
 	if (!(temp = buff_read(fd)))
 		return (-1);
-	//printf("temp : %s\n", temp);
-	//printf("line : %s\n", *line);
-	//printf("remainder : %s\n", remainder);
-	if (remainder)
+	if (remainder[fd] && line[0][0] != '\0' && remainder[fd][0] != '\0')
 	{
-		if (!(temp = remainder_handling(remainder, temp)))
+		if (!(temp = remainder_handling(remainder, temp, fd)))
 		{
 			ft_strdel(&temp);
 			return (-1);
@@ -69,15 +66,14 @@ int		get_next_line(const int fd, char **line)
 	}
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
-		*line = ft_strsub(temp, 0, (ptr - temp));
-		remainder = ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp));
+		*line = ft_strsub_free(temp, 0, (ptr - temp), 0);
+		remainder[fd] = ft_strsub_free(temp, (ptr - temp) + 1, ft_strlen(temp), 0);
 		//ft_strdel(&temp);
 		return (1);
 	}
 	else
 	{
 		*line = temp;
-		//printf("line2 : %s\n", *line);
 		//ft_strdel(&temp);
 	}
 	if (line[0][0] == '\0')
