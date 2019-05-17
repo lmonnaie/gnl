@@ -6,7 +6,7 @@
 /*   By: lmonnaie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:04:47 by lmonnaie          #+#    #+#             */
-/*   Updated: 2019/03/13 15:37:02 by lmonnaie         ###   ########.fr       */
+/*   Updated: 2019/05/17 16:34:56 by lmonnaie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ char	*remainder_handling(char **remainder, char *buff, int fd)
 {
 	char *temp;
 
-	if (!(temp = ft_strjoin_free(remainder[fd], buff, 3)))
+	if (!(temp = ft_strjoin(remainder[fd], buff)))
 		return (NULL);
+	ft_strdel(&buff);
+	ft_strdel(&remainder[fd]);
 	return (temp);
 }
 
@@ -41,26 +43,17 @@ char	*buff_read(int fd)
 	return (temp_buff);
 }
 
-int		get_next_line(const int fd, char **line)
+int		ft_handling(char *temp, char **remainder, int fd, char **line)
 {
-	static char		*remainder[OPEN_MAX];
-	char			*ptr;
-	char			*temp;
+	char	*ptr;
 
-	if (fd < 0 || fd > OPEN_MAX || line == NULL)
-		return (-1);
-	if (!(temp = buff_read(fd)))
-		return (-1);
-	if (remainder[fd] && remainder[fd][0] != '\0')
-	{
-		if (!(temp = remainder_handling(remainder, temp, fd)))
-			return (-1);
-	}
 	if ((ptr = ft_strchr(temp, '\n')) != NULL)
 	{
-
-		*line = ft_strsub(temp, 0, (ptr - temp));
-		remainder[fd] = ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp) - (ptr - temp));
+		if (!(*line = ft_strsub(temp, 0, (ptr - temp))))
+			return (-1);
+		if (!(remainder[fd] =
+			ft_strsub(temp, (ptr - temp) + 1, ft_strlen(temp) - (ptr - temp))))
+			return (-1);
 		ft_strdel(&temp);
 		return (1);
 	}
@@ -71,8 +64,28 @@ int		get_next_line(const int fd, char **line)
 			ft_strdel(&temp);
 			return (0);
 		}
-		*line = ft_strdup(temp);
+		if (!(*line = ft_strdup(temp)))
+			return (-1);
 		ft_strdel(&temp);
 	}
 	return (1);
+}
+
+int		get_next_line(const int fd, char **line)
+{
+	static char		*remainder[OPEN_MAX];
+	char			*temp;
+	int				ret;
+
+	if (fd < 0 || fd > OPEN_MAX || line == NULL)
+		return (-1);
+	if (!(temp = buff_read(fd)))
+		return (-1);
+	if (remainder[fd] && remainder[fd][0] != '\0')
+	{
+		if (!(temp = remainder_handling(remainder, temp, fd)))
+			return (-1);
+	}
+	ret = ft_handling(temp, remainder, fd, line);
+	return (ret);
 }
